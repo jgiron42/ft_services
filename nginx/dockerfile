@@ -1,0 +1,41 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    dockerfile                                         :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jgiron <marvin@42.fr>                      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/07/29 16:15:20 by jgiron            #+#    #+#              #
+#    Updated: 2020/08/11 18:04:54 by jgiron           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+FROM	alpine
+
+RUN		apk update && apk add zsh bash git vim nginx openssl openssh openrc php7 php7-fpm php7-opcache curl php7-gd php7-mysqli php7-zlib php7-curl
+RUN		 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+RUN		mkdir /run/nginx /run/php-fpm7/ && rm /etc/nginx/conf.d/*
+RUN		adduser -g www -h /home/www/ -D  www
+
+RUN		mkdir /etc/nginx/ssl/ && \
+		openssl req -x509 -nodes -days 365 -newkey rsa:4096 \
+		-subj '/C=FR/ST=75/L=Paris/O=42/CN=jgiron' \
+		-keyout /etc/nginx/ssl/localhost.key -out /etc/nginx/ssl/localhost.crt;
+
+RUN adduser --disabled-password regusr && \ 
+    sh -c 'echo "regusr:<encoded_passwd>"' | chpasswd -e > /dev/null 2>&1 && \
+    sh -c 'echo "regusr ALL=NOPASSWD: ALL"' >> /etc/sudoers
+
+RUN		ssh-keygen -A
+
+COPY	srcs/init/init.sh /tmp/
+COPY	srcs/nginx/localhost.conf /etc/nginx/conf.d/
+COPY	srcs/ssh/sshd_config /etc/ssh/sshd_config
+
+
+
+COPY	srcs/html/ /var/www/localhost
+
+EXPOSE  80 443 22
+
+CMD		["/tmp/init.sh"]

@@ -6,15 +6,20 @@
 #    By: jgiron <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/29 16:15:20 by jgiron            #+#    #+#              #
-#    Updated: 2020/08/17 18:07:56 by jgiron           ###   ########.fr        #
+#    Updated: 2020/08/18 15:18:23 by jgiron           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 FROM	alpine
 
 RUN		apk update && apk add zsh bash git vim openssl vsftpd
+RUN		mkdir /srv/ftp
+RUN		chown nobody:nogroup /srv/ftp
+RUN		echo "anon" | tee /srv/ftp/anon.txt
+RUN		echo root:root | chpasswd
 
 COPY	srcs/init/init.sh /tmp/
+COPY	srcs/vsftpd/vsftpd.conf /etc/vsftpd/vsftpd.conf
 
 EXPOSE  21 443 22
 

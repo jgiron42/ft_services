@@ -1,0 +1,12 @@
+apiVersion: 1
+
+datasources:
+  - name: influxdb
+    type: influxdb
+    access: browser
+    database: telegraf
+    user: grafana_user
+    password: grafana
+    url: http://localhost:8086
+    jsonData:
+      httpMode: GET

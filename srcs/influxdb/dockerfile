@@ -1,0 +1,24 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    dockerfile                                         :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jgiron <marvin@42.fr>                      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/07/29 16:15:20 by jgiron            #+#    #+#              #
+#    Updated: 2020/09/21 17:58:25 by jgiron           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+FROM	alpine:latest
+
+RUN	apk update && apk add influxdb
+
+COPY	srcs/init/init.sh /tmp/
+COPY	srcs/influxdb/influxdb.conf /etc/influxdb.conf
+COPY	srcs/init/db.conf /tmp/db.conf
+RUN	influxd & until (influx < /tmp/db.conf) do (echo coucou) done
+
+EXPOSE	8086
+
+CMD	["/tmp/init.sh"]

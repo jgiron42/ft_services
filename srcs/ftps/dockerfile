@@ -1,0 +1,31 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    dockerfile                                         :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jgiron <marvin@42.fr>                      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/07/29 16:15:20 by jgiron            #+#    #+#              #
+#    Updated: 2020/09/09 17:44:41 by jgiron           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+FROM	alpine
+
+RUN		apk update && apk add zsh bash git vim openssl vsftpd
+RUN		mkdir /srv/ftp
+RUN		chown nobody:nogroup /srv/ftp
+RUN		echo "anon" | tee /srv/ftp/anon.txt
+RUN		echo root:root | chpasswd
+RUN		mkdir -p /etc/ssl-vsftpd/private && \
+		openssl req -x509 -nodes -days 365 -newkey rsa:4096 \
+		-subj '/C=FR/ST=75/L=Paris/O=42/CN=jgiron' \
+		-keyout /etc/ssl-vsftpd/private/localhost.key -out /etc/ssl-vsftpd/private/localhost.crt;
+
+
+COPY	srcs/init/init.sh /tmp/
+COPY	srcs/vsftpd/vsftpd.conf /etc/vsftpd/vsftpd.conf
+
+EXPOSE  21 443 22 990
+
+CMD		["/tmp/init.sh"]

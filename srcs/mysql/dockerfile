@@ -1,0 +1,32 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    dockerfile                                         :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jgiron <marvin@42.fr>                      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/07/29 16:15:20 by jgiron            #+#    #+#              #
+#    Updated: 2020/09/25 16:21:09 by jgiron           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+FROM	alpine:latest
+
+RUN	apk update && apk add  mariadb mariadb-client  && apk add --no-cache --upgrade bash
+RUN	mkdir /run/mysqld/
+
+COPY	srcs/init/init.sh /tmp/
+COPY	srcs/init/init_mysql.sh /tmp/
+COPY	srcs/init/wp.sql /tmp/
+COPY	srcs/mysql.conf /tmp/
+COPY	srcs/my.cnf /etc/mysql/my.cnf
+
+RUN		sed -i 's/skip-networking/#skip-networking/g' /etc/my.cnf.d/mariadb-server.cnf
+RUN		/usr/bin/mysql_install_db --datadir="/var/lib/mysql"
+RUN		mysqld_safe & until (mysql --datadir="/var/lib/mysql" < /tmp/wp.sql) do (echo coucou) done
+
+#RUN	sed -i 's/skip-networking/#skip-networking/g' /etc/my.cnf.d/mariadb-server.cnf && \
+#	/usr/bin/mysql_install_db --user=mysql --datadir="/var/lib/mysql" 
+#	/usr/bin/mysqld_safe --datadir="/var/lib/mysql"
+
+CMD	["/tmp/init.sh"]

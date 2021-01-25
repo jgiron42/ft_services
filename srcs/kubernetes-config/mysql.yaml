@@ -1,0 +1,69 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    influxdb.yaml                                      :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jgiron <marvin@42.fr>                      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/10/15 16:00:14 by jgiron            #+#    #+#              #
+#    Updated: 2020/10/22 16:14:37 by jgiron           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-db
+  labels:
+    app: mysql
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment
+  labels:
+    app: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: ft_mysql
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - mountPath: "/var/lib/mysql"
+          name: mysql-db
+      volumes:
+        - name: mysql-db
+          persistentVolumeClaim:
+            claimName: mysql-db
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  annotations:
+    metallb.universe.tf/allow-shared-ip: cluster
+spec:
+  selector:
+    app: mysql
+  ports:
+    - name: mysql-db
+      protocol: TCP
+      port: 3306
+      targetPort: 3306

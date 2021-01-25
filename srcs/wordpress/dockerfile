@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-FROM	alpine
+FROM	alpine:3.12
 
 RUN		apk update && apk add --no-cache bash curl less vim nginx openssl ca-certificates git tzdata zip \
     libmcrypt-dev zlib-dev gmp-dev \
@@ -20,6 +20,12 @@ RUN		apk update && apk add --no-cache bash curl less vim nginx openssl ca-certif
     php7-gd php7-iconv php7-mcrypt php7-gmp php7-zip \
     php7-curl php7-opcache php7-ctype php7-apcu \
     php7-intl php7-bcmath php7-dom php7-mbstring php7-xmlreader mysql-client && apk add -u musl
+RUN             wget https://dl.influxdata.com/telegraf/releases/telegraf-1.6.3-static_linux_amd64.tar.gz && \
+        tar -C . -xzf telegraf-1.6.3-static_linux_amd64.tar.gz && \
+        chmod +x telegraf/* && \
+        cp telegraf/telegraf /usr/bin/ && \
+        rm -rf *.tar.gz* telegraf/
+
     
 RUN		mkdir /run/nginx /run/php7-fpm/ && rm /etc/nginx/conf.d/*
 RUN		adduser -g www -h /home/www/ -D  www
@@ -29,11 +35,13 @@ RUN		mkdir /etc/nginx/ssl/ && \
 		-subj '/C=FR/ST=75/L=Paris/O=42/CN=jgiron' \
 		-keyout /etc/nginx/ssl/localhost.key -out /etc/nginx/ssl/localhost.crt;
 RUN		echo root:root | chpasswd 
+RUN	mkdir -p /etc/telegraf
 
 COPY	srcs/init/init.sh /tmp/
 COPY	srcs/nginx/localhost.conf /etc/nginx/conf.d/
 COPY	srcs/php/www.conf /etc/php7/php-fpm.d/www.conf
 COPY	srcs/wordpress/ /var/www/localhost/
+COPY	srcs/telegraf.conf		/etc/telegraf/
 
 EXPOSE  80 443 22
 

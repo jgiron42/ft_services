@@ -1,0 +1,49 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    ftps.yaml                                          :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jgiron <marvin@42.fr>                      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/10/15 16:00:14 by jgiron            #+#    #+#              #
+#    Updated: 2020/10/22 16:14:37 by jgiron           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ftps-deployment
+  labels:
+    app: ftps
+spec:
+  selector:
+    matchLabels:
+      app: ftps
+  template:
+    metadata:
+      labels:
+        app: ftps
+    spec:
+      containers:
+      - name: ftps
+        image: ft_ftps
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 21
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ftps
+  annotations:
+    metallb.universe.tf/allow-shared-ip: cluster
+spec:
+  selector:
+    app: ftps
+  ports:
+    - name: ftps-ftp
+      protocol: TCP
+      port: 21
+      targetPort: 21
+  type: LoadBalancer

@@ -10,9 +10,14 @@
 #                                                                              #
 # **************************************************************************** #
 
-FROM	alpine
+FROM	alpine:3.12
 
 RUN		apk update && apk add zsh bash git vim openssl vsftpd
+RUN             wget https://dl.influxdata.com/telegraf/releases/telegraf-1.6.3-static_linux_amd64.tar.gz && \
+        tar -C . -xzf telegraf-1.6.3-static_linux_amd64.tar.gz && \
+        chmod +x telegraf/* && \
+        cp telegraf/telegraf /usr/bin/ && \
+        rm -rf *.tar.gz* telegraf/
 RUN		mkdir /srv/ftp
 RUN		chown nobody:nogroup /srv/ftp
 RUN		echo "anon" | tee /srv/ftp/anon.txt
@@ -21,10 +26,12 @@ RUN		mkdir -p /etc/ssl-vsftpd/private && \
 		openssl req -x509 -nodes -days 365 -newkey rsa:4096 \
 		-subj '/C=FR/ST=75/L=Paris/O=42/CN=jgiron' \
 		-keyout /etc/ssl-vsftpd/private/localhost.key -out /etc/ssl-vsftpd/private/localhost.crt;
-
+RUN		mkdir -p /etc/telegraf
 
 COPY	srcs/init/init.sh /tmp/
 COPY	srcs/vsftpd/vsftpd.conf /etc/vsftpd/vsftpd.conf
+COPY	srcs/telegraf.conf		/etc/telegraf/
+
 
 EXPOSE  21 443 22 990
 

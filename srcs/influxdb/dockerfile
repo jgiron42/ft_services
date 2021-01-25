@@ -10,14 +10,19 @@
 #                                                                              #
 # **************************************************************************** #
 
-FROM	alpine:latest
+FROM	alpine:3.12
 
-RUN	apk update && apk add influxdb
+RUN	apk update && apk upgrade && apk add influxdb
+RUN             wget https://dl.influxdata.com/telegraf/releases/telegraf-1.6.3-static_linux_amd64.tar.gz && \
+        tar -C . -xzf telegraf-1.6.3-static_linux_amd64.tar.gz && \
+        chmod +x telegraf/* && \
+        cp telegraf/telegraf /usr/bin/ && \
+        rm -rf *.tar.gz* telegraf/
+RUN	mkdir -p /etc/telegraf
 
 COPY	srcs/init/init.sh /tmp/
-COPY	srcs/influxdb/influxdb.conf /etc/influxdb.conf
 COPY	srcs/init/db.conf /tmp/db.conf
-RUN	influxd & until (influx < /tmp/db.conf) do (echo coucou) done
+COPY	srcs/telegraf.conf		/etc/telegraf/
 
 EXPOSE	8086
 

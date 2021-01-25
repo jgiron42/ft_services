@@ -1,0 +1,70 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    influxdb.yaml                                      :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jgiron <marvin@42.fr>                      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/10/15 16:00:14 by jgiron            #+#    #+#              #
+#    Updated: 2020/10/22 16:14:37 by jgiron           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: influxdb-volume
+  labels:
+    app: influxdb
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: influxdb-deployment
+  labels:
+    app: influxdb
+spec:
+  selector:
+    matchLabels:
+      app: influxdb
+  template:
+    metadata:
+      labels:
+        app: influxdb
+    spec:
+      containers:
+      - name: influxdb
+        image: ft_influxdb:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8086
+        volumeMounts:
+        - mountPath: "/var/lib/influxdb"
+          name: influxdb-volume
+      volumes:
+        - name: influxdb-volume
+          persistentVolumeClaim:
+            claimName: influxdb-volume
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: influxdb
+  annotations:
+    metallb.universe.tf/allow-shared-ip: cluster
+spec:
+  selector:
+    app: influxdb
+  ports:
+    - name: influxdb
+      protocol: TCP
+      port: 8086
+      targetPort: 8086
+

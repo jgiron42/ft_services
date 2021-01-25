@@ -1,3 +1,4 @@
 #!/bin/sh
-influxd
+/usr/bin/telegraf &
+influxd & influx < /tmp/db.conf
 sleep infinity

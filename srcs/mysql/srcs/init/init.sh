@@ -1,8 +1,8 @@
 #!/bin/ash
-#nohup /tmp/init_mysql.sh > /dev/null 2>&1 &
-
-#sed -i 's/skip-networking/#skip-networking/g' /etc/my.cnf.d/mariadb-server.cnf
-#/usr/bin/mysql_install_db --user=mysql --datadir="/var/lib/mysql"
-#/usr/bin/mysqld_safe --datadir="/var/lib/mysql"
+/usr/bin/mysql_install_db --datadir="/var/lib/mysql";
+/usr/bin/telegraf &
+/usr/bin/mysqld --user=root --init_file=/tmp/mysql.conf & 
+mysql wordpress -u root < /tmp/wordpress_dump.sql
+#/usr/bin/mysqld --user=root & sleep 3
 
 sleep infinity

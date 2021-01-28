@@ -1,4 +1,5 @@
 #!/bin/sh
+/etc/init.d/vsftpd setup
 /usr/bin/telegraf &
-vsftpd /etc/vsftpd/vsftpd.conf
+service vsftpd start
 sleep infinity

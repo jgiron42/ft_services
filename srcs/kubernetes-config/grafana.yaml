@@ -13,7 +13,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: grafana-deployment
+  name: grafana
   labels:
     app: grafana
 spec:
@@ -27,10 +27,30 @@ spec:
     spec:
       containers:
       - name: grafana
-        image: ft_grafana:latest
+        image: ft_grafana
         imagePullPolicy: Never
         ports:
         - containerPort: 3000
+        volumeMounts:
+        - name: telegraf-endpoint
+          mountPath: "/var/run/docker.sock"
+        livenessProbe:
+#          httpGet:
+#            path: /login
+#            port: 3000
+#            scheme: HTTP
+          initialDelaySeconds: 3
+          periodSeconds: 3
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - ps aux | grep -v grep | grep "telegraf" && ps aux | grep -v grep | grep "grafana-server"
+      volumes:
+      - name: telegraf-endpoint
+        hostPath:
+          path: /var/run/docker.sock
+
 ---
 apiVersion: v1
 kind: Service
@@ -47,3 +67,24 @@ spec:
       port: 3000
       targetPort: 3000
   type: LoadBalancer
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: telegraf-account
+  labels:
+    app: influxdb
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: telegraf-role
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: telegraf-account
+  namespace: default

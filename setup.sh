@@ -1,3 +1,5 @@
+minikube delete
+minikube start --vm-driver=virtualbox
 eval $(minikube -p minikube docker-env)
 docker build -t ft_wordpress srcs/wordpress/.
 docker build -t ft_phpmyadmin srcs/phpmyadmin/.
@@ -12,4 +14,4 @@ sh srcs/kubernetes-config/setup_metallb.sh
 for file in `ls -1 srcs/kubernetes-config/*.yaml`; do
    kubectl apply -f $file
 done
-minikube dashboard
+minikube dashboard &

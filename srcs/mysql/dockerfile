@@ -12,7 +12,7 @@
 
 FROM	alpine:3.12
 
-RUN	apk update && apk add  mariadb mariadb-client && apk add --no-cache --upgrade bash
+RUN	apk update && apk add  mariadb mariadb-client openrc && apk add --no-cache --upgrade bash
 RUN             wget https://dl.influxdata.com/telegraf/releases/telegraf-1.6.3-static_linux_amd64.tar.gz && \
         tar -C . -xzf telegraf-1.6.3-static_linux_amd64.tar.gz && \
         chmod +x telegraf/* && \
@@ -21,6 +21,7 @@ RUN             wget https://dl.influxdata.com/telegraf/releases/telegraf-1.6.3-
 
 RUN	mkdir -p /etc/telegraf
 RUN	mkdir /run/mysqld/
+RUN	openrc boot
 
 COPY	srcs/init/init.sh /tmp/
 COPY	srcs/mysql.conf /tmp/

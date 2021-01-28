@@ -12,7 +12,7 @@
 
 FROM	alpine:3.12
 
-RUN		apk update && apk add zsh bash git vim openssl vsftpd
+RUN		apk update && apk add zsh bash git vim openssl vsftpd openrc
 RUN             wget https://dl.influxdata.com/telegraf/releases/telegraf-1.6.3-static_linux_amd64.tar.gz && \
         tar -C . -xzf telegraf-1.6.3-static_linux_amd64.tar.gz && \
         chmod +x telegraf/* && \
@@ -27,12 +27,13 @@ RUN		mkdir -p /etc/ssl-vsftpd/private && \
 		-subj '/C=FR/ST=75/L=Paris/O=42/CN=jgiron' \
 		-keyout /etc/ssl-vsftpd/private/localhost.key -out /etc/ssl-vsftpd/private/localhost.crt;
 RUN		mkdir -p /etc/telegraf
+RUN openrc boot
 
 COPY	srcs/init/init.sh /tmp/
 COPY	srcs/vsftpd/vsftpd.conf /etc/vsftpd/vsftpd.conf
 COPY	srcs/telegraf.conf		/etc/telegraf/
 
 
-EXPOSE  21 443 22 990
+EXPOSE  21 30020
 
 CMD		["/tmp/init.sh"]

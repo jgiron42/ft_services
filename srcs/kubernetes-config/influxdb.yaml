@@ -27,7 +27,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: influxdb-deployment
+  name: influxdb
   labels:
     app: influxdb
 spec:
@@ -48,6 +48,11 @@ spec:
         volumeMounts:
         - mountPath: "/var/lib/influxdb"
           name: influxdb-volume
+        livenessProbe:
+          tcpSocket:
+            port: 8086
+          initialDelaySeconds: 3
+          periodSeconds: 3
       volumes:
         - name: influxdb-volume
           persistentVolumeClaim:

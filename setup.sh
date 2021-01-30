@@ -1,5 +1,6 @@
 minikube delete
-minikube start --vm-driver=virtualbox
+minikube start --vm-driver=docker
+srcs/switch_ip.sh
 eval $(minikube -p minikube docker-env)
 docker build -t ft_wordpress srcs/wordpress/.
 docker build -t ft_phpmyadmin srcs/phpmyadmin/.

@@ -6,7 +6,7 @@
 #    By: jgiron <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/15 16:00:14 by jgiron            #+#    #+#              #
-#    Updated: 2020/10/22 16:14:37 by jgiron           ###   ########.fr        #
+#    Updated: 2021/01/29 13:46:10 by jgiron           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ spec:
         imagePullPolicy: Never
         ports:
         - containerPort: 21
-        - containerPort: 30020
+        - containerPort: 64000
         livenessProbe:
           tcpSocket:
             port: 21
@@ -51,7 +51,7 @@ spec:
       port: 21
       targetPort: 21
     - name: pasv
-      port: 30020
-      targetPort: 30020
+      port: 64000
+      targetPort: 64000
       protocol: TCP
   type: LoadBalancer

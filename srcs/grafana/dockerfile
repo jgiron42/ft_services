@@ -6,7 +6,7 @@
 #    By: jgiron <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/29 16:15:20 by jgiron            #+#    #+#              #
-#    Updated: 2020/09/21 17:21:10 by jgiron           ###   ########.fr        #
+#    Updated: 2021/01/30 14:59:30 by jgiron           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ COPY	srcs/init/init.sh /tmp/
 COPY	srcs/init/db.conf /tmp/
 COPY	srcs/telegraf.conf		/etc/telegraf/
 COPY	srcs/grafana/ /grafana
+COPY	srcs/dashboards /etc/dashboards
 
 EXPOSE  3000
 

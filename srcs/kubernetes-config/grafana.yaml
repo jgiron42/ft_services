@@ -6,7 +6,7 @@
 #    By: jgiron <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/15 16:00:14 by jgiron            #+#    #+#              #
-#    Updated: 2020/10/22 16:14:37 by jgiron           ###   ########.fr        #
+#    Updated: 2021/01/30 15:55:35 by jgiron           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: grafana
-        image: ft_grafana
+        image: ft_grafana:latest
         imagePullPolicy: Never
         ports:
         - containerPort: 3000
@@ -39,13 +39,13 @@ spec:
 #            path: /login
 #            port: 3000
 #            scheme: HTTP
-          initialDelaySeconds: 3
-          periodSeconds: 3
           exec:
             command:
             - /bin/sh
             - -c
-            - ps aux | grep -v grep | grep "telegraf" && ps aux | grep -v grep | grep "grafana-server"
+            - ps aux | grep -v grep | grep "telegraf" && ps aux | grep -v grep | grep "grafana-server"          
+          initialDelaySeconds: 3
+          periodSeconds: 3
       volumes:
       - name: telegraf-endpoint
         hostPath:

@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    influxdb.yaml                                      :+:      :+:    :+:    #
+#    mysql.yaml                                         :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: jgiron <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/15 16:00:14 by jgiron            #+#    #+#              #
-#    Updated: 2020/10/22 16:14:37 by jgiron           ###   ########.fr        #
+#    Updated: 2021/01/30 19:18:19 by jgiron           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,18 +41,21 @@ spec:
     spec:
       containers:
       - name: mysql
-        image: ft_mysql:latest
+        image: ft_mysql
         imagePullPolicy: Never
         ports:
         - containerPort: 3306
         volumeMounts:
         - mountPath: "/var/lib/mysql"
           name: mysql-db
-        livenessProbe:
-          tcpSocket:
-            port: 3306          
-          initialDelaySeconds: 30
-          periodSeconds: 3
+#        livenessProbe:
+#          exec:
+#            command:
+#            - /bin/sh
+#            - -c
+#            - echo 'SHOW DATABASES;' | mysql | grep wordpress
+#          initialDelaySeconds: 30
+#          periodSeconds: 3
       volumes:
         - name: mysql-db
           persistentVolumeClaim:

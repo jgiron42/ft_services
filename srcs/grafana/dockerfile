@@ -6,27 +6,27 @@
 #    By: jgiron <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/29 16:15:20 by jgiron            #+#    #+#              #
-#    Updated: 2021/01/30 14:59:30 by jgiron           ###   ########.fr        #
+#    Updated: 2021/01/30 19:44:44 by jgiron           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 FROM	alpine:3.12
 
-RUN             wget https://dl.influxdata.com/telegraf/releases/telegraf-1.6.3-static_linux_amd64.tar.gz && \
+RUN	wget https://dl.influxdata.com/telegraf/releases/telegraf-1.6.3-static_linux_amd64.tar.gz && \
         tar -C . -xzf telegraf-1.6.3-static_linux_amd64.tar.gz && \
         chmod +x telegraf/* && \
         cp telegraf/telegraf /usr/bin/ && \
         rm -rf *.tar.gz* telegraf/
 
-RUN		apk update && apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main libc6-compat
+RUN	apk update && apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main libc6-compat
 
 RUN	mkdir -p /etc/telegraf
 
-COPY	srcs/init/init.sh /tmp/
-COPY	srcs/init/db.conf /tmp/
-COPY	srcs/telegraf.conf		/etc/telegraf/
-COPY	srcs/grafana/ /grafana
-COPY	srcs/dashboards /etc/dashboards
+COPY	srcs/init/init.sh	/tmp/
+COPY	srcs/init/db.conf	/tmp/
+COPY	srcs/telegraf.conf	/etc/telegraf/
+COPY	srcs/grafana/		/grafana
+COPY	srcs/dashboards		/etc/dashboards
 
 EXPOSE  3000
 

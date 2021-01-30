@@ -6,23 +6,17 @@
 #    By: jgiron <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/29 16:15:20 by jgiron            #+#    #+#              #
-#    Updated: 2020/09/21 17:58:25 by jgiron           ###   ########.fr        #
+#    Updated: 2021/01/30 19:46:17 by jgiron           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 FROM	alpine:3.12
 
 RUN	apk update && apk upgrade && apk add influxdb
-RUN             wget https://dl.influxdata.com/telegraf/releases/telegraf-1.6.3-static_linux_amd64.tar.gz && \
-        tar -C . -xzf telegraf-1.6.3-static_linux_amd64.tar.gz && \
-        chmod +x telegraf/* && \
-        cp telegraf/telegraf /usr/bin/ && \
-        rm -rf *.tar.gz* telegraf/
 RUN	mkdir -p /etc/telegraf
 
-COPY	srcs/init/init.sh /tmp/
-COPY	srcs/init/db.conf /tmp/db.conf
-COPY	srcs/telegraf.conf		/etc/telegraf/
+COPY	srcs/init/init.sh	/tmp/
+COPY	srcs/init/db.conf	/tmp/db.conf
 
 EXPOSE	8086
 

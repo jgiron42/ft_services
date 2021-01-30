@@ -6,27 +6,20 @@
 #    By: jgiron <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/29 16:15:20 by jgiron            #+#    #+#              #
-#    Updated: 2020/09/25 16:21:09 by jgiron           ###   ########.fr        #
+#    Updated: 2021/01/30 19:48:01 by jgiron           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 FROM	alpine:3.12
 
-RUN	apk update && apk add  mariadb mariadb-client openrc && apk add --no-cache --upgrade bash
-RUN             wget https://dl.influxdata.com/telegraf/releases/telegraf-1.6.3-static_linux_amd64.tar.gz && \
-        tar -C . -xzf telegraf-1.6.3-static_linux_amd64.tar.gz && \
-        chmod +x telegraf/* && \
-        cp telegraf/telegraf /usr/bin/ && \
-        rm -rf *.tar.gz* telegraf/
+RUN	apk update && apk add mariadb mariadb-client openrc && apk add --no-cache --upgrade bash
 
-RUN	mkdir -p /etc/telegraf
 RUN	mkdir /run/mysqld/
 RUN	openrc boot
 
-COPY	srcs/init/init.sh /tmp/
-COPY	srcs/mysql.conf /tmp/
-COPY	srcs/my.cnf /etc/my.cnf
-COPY	srcs/wordpress_dump.sql /tmp/wordpress_dump.sql
-COPY	srcs/telegraf.conf		/etc/telegraf/
+COPY	srcs/init/init.sh	/tmp/
+COPY	srcs/mysql.conf		/tmp/
+COPY	srcs/my.cnf		/etc/my.cnf
+COPY	srcs/wordpress_dump.sql	/tmp/wordpress_dump.sql
 
 CMD	["/tmp/init.sh"]

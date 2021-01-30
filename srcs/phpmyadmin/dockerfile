@@ -6,25 +6,20 @@
 #    By: jgiron <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/29 16:15:20 by jgiron            #+#    #+#              #
-#    Updated: 2020/09/21 14:58:27 by jgiron           ###   ########.fr        #
+#    Updated: 2021/01/30 19:50:57 by jgiron           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 FROM	alpine:3.12
 
-RUN		apk update && apk add --no-cache bash curl less vim nginx openssl ca-certificates git tzdata zip \
-    libmcrypt-dev zlib-dev gmp-dev \
-    freetype-dev libjpeg-turbo-dev libpng-dev \
-    php7-fpm php7-json php7-zlib php7-xml php7-xmlwriter php7-simplexml php7-pdo php7-phar php7-openssl \
-    php7-pdo_mysql php7-mysqli php7-session \
-    php7-gd php7-iconv php7-mcrypt php7-gmp php7-zip \
-    php7-curl php7-opcache php7-ctype php7-apcu \
-    php7-intl php7-bcmath php7-dom php7-mbstring php7-xmlreader mysql-client && apk add -u musl
-RUN             wget https://dl.influxdata.com/telegraf/releases/telegraf-1.6.3-static_linux_amd64.tar.gz && \
-        tar -C . -xzf telegraf-1.6.3-static_linux_amd64.tar.gz && \
-        chmod +x telegraf/* && \
-        cp telegraf/telegraf /usr/bin/ && \
-        rm -rf *.tar.gz* telegraf/
+RUN	apk update && apk add --no-cache bash curl less vim nginx openssl ca-certificates git tzdata zip \
+	libmcrypt-dev zlib-dev gmp-dev \
+	freetype-dev libjpeg-turbo-dev libpng-dev \
+	php7-fpm php7-json php7-zlib php7-xml php7-xmlwriter php7-simplexml php7-pdo php7-phar php7-openssl \
+	php7-pdo_mysql php7-mysqli php7-session \
+	php7-gd php7-iconv php7-mcrypt php7-gmp php7-zip \
+	php7-curl php7-opcache php7-ctype php7-apcu \
+	php7-intl php7-bcmath php7-dom php7-mbstring php7-xmlreader mysql-client && apk add -u musl
  
 RUN		mkdir /run/nginx /run/php7-fpm/ && rm /etc/nginx/conf.d/*
 RUN		adduser -g www -h /home/www/ -D  www
@@ -34,14 +29,12 @@ RUN		mkdir /etc/nginx/ssl/ && \
 		-subj '/C=FR/ST=75/L=Paris/O=42/CN=jgiron' \
 		-keyout /etc/nginx/ssl/localhost.key -out /etc/nginx/ssl/localhost.crt;
 RUN		echo root:root | chpasswd 
-RUN	mkdir -p /etc/telegraf
 
-COPY	srcs/telegraf.conf		/etc/telegraf/
-COPY	srcs/init/init.sh /tmp/
-COPY	srcs/nginx/localhost.conf /etc/nginx/conf.d/
-COPY	srcs/php/www.conf /etc/php7/php-fpm.d/www.conf
-COPY	srcs/phpmyadmin/ /var/www/localhost/
+COPY	srcs/init/init.sh		/tmp/
+COPY	srcs/nginx/localhost.conf	/etc/nginx/conf.d/
+COPY	srcs/php/www.conf		/etc/php7/php-fpm.d/www.conf
+COPY	srcs/phpmyadmin/		/var/www/localhost/
 
-EXPOSE  80 443 22
+EXPOSE  80 443
 
 CMD		["/tmp/init.sh"]

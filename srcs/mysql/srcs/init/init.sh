@@ -8,5 +8,4 @@ if [ -z "$FLAG" ] ; then
 	/etc/init.d/mariadb setup
 fi
 service mariadb start
-#/usr/bin/mysqld --user=root & sleep 3
 sleep infinity

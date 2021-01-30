@@ -6,20 +6,14 @@
 #    By: jgiron <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/29 16:15:20 by jgiron            #+#    #+#              #
-#    Updated: 2020/09/22 17:29:47 by jgiron           ###   ########.fr        #
+#    Updated: 2021/01/30 19:39:22 by jgiron           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 FROM	alpine:3.12
 
-RUN		apk update && apk add zsh bash git vim nginx openssl openssh openrc php7 php7-fpm php7-opcache curl php7-gd php7-mysqli php7-zlib php7-curl
-RUN             wget https://dl.influxdata.com/telegraf/releases/telegraf-1.6.3-static_linux_amd64.tar.gz && \
-        tar -C . -xzf telegraf-1.6.3-static_linux_amd64.tar.gz && \
-        chmod +x telegraf/* && \
-        cp telegraf/telegraf /usr/bin/ && \
-        rm -rf *.tar.gz* telegraf/
+RUN		apk update && apk add bash git vim nginx openssl openrc php7 php7-fpm php7-opcache curl php7-gd php7-mysqli php7-zlib php7-curl
 
-RUN		 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 RUN		apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main libc6-compat
 
 RUN		mkdir /run/nginx /run/php-fpm7/ && rm /etc/nginx/conf.d/*
@@ -30,16 +24,12 @@ RUN		mkdir /etc/nginx/ssl/ && \
 		-subj '/C=FR/ST=75/L=Paris/O=42/CN=jgiron' \
 		-keyout /etc/nginx/ssl/localhost.key -out /etc/nginx/ssl/localhost.crt;
 RUN		ssh-keygen -A
-RUN		echo root:root | chpasswd 
-RUN	mkdir -p /etc/telegraf
 
 COPY	srcs/init/init.sh		/tmp/
 COPY	srcs/nginx/localhost.conf	/etc/nginx/conf.d/
-COPY	srcs/ssh/sshd_config		/etc/ssh/sshd_config
-COPY	srcs/telegraf.conf		/etc/telegraf/
 
 COPY	srcs/html/ /var/www/localhost
 
-EXPOSE  80 443 22
+EXPOSE  80 443 
 
 CMD		["/tmp/init.sh"]

@@ -5,7 +5,7 @@ then
 	DRIVER="virtualbox"
 fi
 printf "Deleting old minikube...                      "
-minikube delete > /dev/null
+minikube delete > /dev/null 2>&1
 echo OK
 printf "Starting minikube with driver %-13s   " "$DRIVER..."
 minikube start --vm-driver=$DRIVER > /dev/null

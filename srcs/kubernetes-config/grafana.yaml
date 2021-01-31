@@ -6,7 +6,7 @@
 #    By: jgiron <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/15 16:00:14 by jgiron            #+#    #+#              #
-#    Updated: 2021/01/30 21:10:24 by jgiron           ###   ########.fr        #
+#    Updated: 2021/01/31 02:17:24 by jgiron           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,10 +35,6 @@ spec:
         - name: telegraf-endpoint
           mountPath: "/var/run/docker.sock"
         livenessProbe:
-#          httpGet:
-#            path: /login
-#            port: 3000
-#            scheme: HTTP
           exec:
             command:
             - /bin/sh
@@ -67,24 +63,3 @@ spec:
       port: 3000
       targetPort: 3000
   type: LoadBalancer
----
-
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: telegraf-account
-  labels:
-    app: influxdb
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: telegraf-role
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: cluster-admin
-subjects:
-- kind: ServiceAccount
-  name: telegraf-account
-  namespace: default

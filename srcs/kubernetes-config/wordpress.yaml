@@ -6,7 +6,7 @@
 #    By: jgiron <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/15 16:00:14 by jgiron            #+#    #+#              #
-#    Updated: 2020/10/22 16:14:37 by jgiron           ###   ########.fr        #
+#    Updated: 2021/01/31 01:06:39 by jgiron           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: wordpress
-        image: ft_wordpress:latest
+        image: ft_wordpress
         imagePullPolicy: Never
         ports:
         - containerPort: 443

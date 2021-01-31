@@ -6,7 +6,7 @@
 #    By: jgiron <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/29 16:15:20 by jgiron            #+#    #+#              #
-#    Updated: 2021/01/30 19:53:46 by jgiron           ###   ########.fr        #
+#    Updated: 2021/01/31 01:05:44 by jgiron           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,6 @@ COPY	srcs/nginx/localhost.conf	/etc/nginx/conf.d/
 COPY	srcs/php/www.conf		/etc/php7/php-fpm.d/www.conf
 COPY	srcs/wordpress/			/var/www/localhost/
 
-EXPOSE  80 443
+EXPOSE  5050
 
 CMD		["/tmp/init.sh"]

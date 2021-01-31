@@ -24,7 +24,7 @@ cat srcs/grafana/srcs/template_dashboard.json | sed "s/|name|/ftps/" > srcs/graf
 cat srcs/grafana/srcs/template_dashboard.json | sed "s/|name|/nginx/" > srcs/grafana/srcs/dashboards/nginx_dashboard.json
 echo OK
 
-echo "\n=================Building images=================="
+echo "\n================Building images================="
 printf "Wordpress...                                  "
 docker build -t ft_wordpress srcs/wordpress/. > /dev/null
 echo OK

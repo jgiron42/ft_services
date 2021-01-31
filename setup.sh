@@ -55,5 +55,5 @@ done
 echo OK
 
 printf "Starting dashboard...                         "
-minikube dashboard & > /dev/null
+minikube dashboard > /dev/null & > /dev/null
 echo OK

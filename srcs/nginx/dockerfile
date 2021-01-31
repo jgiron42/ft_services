@@ -6,7 +6,7 @@
 #    By: jgiron <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/29 16:15:20 by jgiron            #+#    #+#              #
-#    Updated: 2021/01/30 19:39:22 by jgiron           ###   ########.fr        #
+#    Updated: 2021/01/30 20:04:03 by jgiron           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,6 @@ RUN		mkdir /etc/nginx/ssl/ && \
 		openssl req -x509 -nodes -days 365 -newkey rsa:4096 \
 		-subj '/C=FR/ST=75/L=Paris/O=42/CN=jgiron' \
 		-keyout /etc/nginx/ssl/localhost.key -out /etc/nginx/ssl/localhost.crt;
-RUN		ssh-keygen -A
 
 COPY	srcs/init/init.sh		/tmp/
 COPY	srcs/nginx/localhost.conf	/etc/nginx/conf.d/

@@ -6,7 +6,7 @@
 #    By: jgiron <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/29 16:15:20 by jgiron            #+#    #+#              #
-#    Updated: 2021/01/30 19:42:39 by jgiron           ###   ########.fr        #
+#    Updated: 2021/01/31 01:02:07 by jgiron           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,6 @@ RUN	openrc boot
 
 COPY	srcs/init/init.sh	/tmp/
 COPY	srcs/vsftpd/vsftpd.conf	/etc/vsftpd/vsftpd.conf
-COPY	srcs/telegraf.conf	/etc/telegraf/
 
 
 EXPOSE  21 64000

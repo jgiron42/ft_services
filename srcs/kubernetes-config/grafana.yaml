@@ -6,7 +6,7 @@
 #    By: jgiron <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/15 16:00:14 by jgiron            #+#    #+#              #
-#    Updated: 2021/01/30 15:55:35 by jgiron           ###   ########.fr        #
+#    Updated: 2021/01/30 21:10:24 by jgiron           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: grafana
-        image: ft_grafana:latest
+        image: ft_grafana
         imagePullPolicy: Never
         ports:
         - containerPort: 3000

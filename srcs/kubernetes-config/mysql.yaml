@@ -6,7 +6,7 @@
 #    By: jgiron <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/15 16:00:14 by jgiron            #+#    #+#              #
-#    Updated: 2021/01/30 19:18:19 by jgiron           ###   ########.fr        #
+#    Updated: 2021/01/30 21:01:14 by jgiron           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,14 +48,14 @@ spec:
         volumeMounts:
         - mountPath: "/var/lib/mysql"
           name: mysql-db
-#        livenessProbe:
-#          exec:
-#            command:
-#            - /bin/sh
-#            - -c
-#            - echo 'SHOW DATABASES;' | mysql | grep wordpress
-#          initialDelaySeconds: 30
-#          periodSeconds: 3
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - echo 'SHOW DATABASES;' | mysql | grep wordpress
+          initialDelaySeconds: 30
+          periodSeconds: 3
       volumes:
         - name: mysql-db
           persistentVolumeClaim:

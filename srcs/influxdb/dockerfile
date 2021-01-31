@@ -6,14 +6,15 @@
 #    By: jgiron <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/29 16:15:20 by jgiron            #+#    #+#              #
-#    Updated: 2021/01/30 19:46:17 by jgiron           ###   ########.fr        #
+#    Updated: 2021/01/30 20:58:43 by jgiron           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 FROM	alpine:3.12
 
-RUN	apk update && apk upgrade && apk add influxdb
+RUN	apk update && apk upgrade && apk add influxdb openrc
 RUN	mkdir -p /etc/telegraf
+RUN	openrc boot
 
 COPY	srcs/init/init.sh	/tmp/
 COPY	srcs/init/db.conf	/tmp/db.conf

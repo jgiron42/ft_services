@@ -1,6 +1,6 @@
 
 DRIVER="docker"
-if [ $1 = "virtualbox" ]
+if [ "$1" = "virtualbox" ]
 then
 	DRIVER="virtualbox"
 fi
